@@ -18,9 +18,14 @@ Route::get('/biens', [\App\Http\Controllers\PropertyController::class,'index'])-
 Route::get('/biens/{slug}{property}', [\App\Http\Controllers\PropertyController::class,'show'])->name('property.show')->where(
     ['property'=>'[0-9]+']
 );
+Route::post('/biens/{property}/contact', [\App\Http\Controllers\PropertyController::class,'contact'])->name('property.contact');
+
+Route::get('/login', [\App\Http\Controllers\AuthController::class,'login'])->name('login');
+Route::post('/login', [\App\Http\Controllers\AuthController::class,'dologin']);
+Route::delete('/logout', [\App\Http\Controllers\AuthController::class,'logout'])->name('logout');
 
 
-Route::prefix('admin')->name('admin.')->group(function (){
+Route::prefix('admin')->middleware('auth')->name('admin.')->group(function (){
  Route::resource('property', \App\Http\Controllers\Admin\PropertyController::class);
  Route::resource('option', \App\Http\Controllers\Admin\OptionController::class);
 });
